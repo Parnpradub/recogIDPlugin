@@ -1,6 +1,7 @@
 
 package com.creative.idrecognition;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
@@ -16,7 +17,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
 
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
-    OcrDetectorProcessor(AppCompatActivity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
+    OcrDetectorProcessor(Activity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
         mGraphicOverlay = ocrGraphicOverlay;
         mainActivity = (OcrCaptureActivity)activity;
     }

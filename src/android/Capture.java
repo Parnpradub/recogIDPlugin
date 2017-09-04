@@ -210,8 +210,6 @@ public class Capture extends CordovaPlugin {
             PermissionHelper.requestPermission(this, req.requestCode, Manifest.permission.CAMERA);
         } else {
             // Save the number of images currently on disk for later
-            this.numPics = queryImgDB(whichContentStore()).getCount();
-
             Intent intent = new Intent(this.cordova.getActivity(), OcrCaptureActivity.class);
 //            intent.putExtra(OcrCaptureActivity.AutoFocus, autoFocus.isChecked());
 //            intent.putExtra(OcrCaptureActivity.UseFlash, useFlash.isChecked());

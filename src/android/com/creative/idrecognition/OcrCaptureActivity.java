@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -47,7 +46,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
 
 
-public final class OcrCaptureActivity extends AppCompatActivity {
+public final class OcrCaptureActivity extends Activity {
     private static final String TAG = "OcrCaptureActivity";
 
     // Intent request code to handle updating play services if needed.
@@ -235,7 +234,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
             Intent data = new Intent();
             String result = item.getValue().toString().replaceAll("[^\\d-]", "");
             data.putExtra(TextBlockObject, "data: "+result);
-            setResult(CommonStatusCodes.SUCCESS, data);
+            setResult(Activity.RESULT_OK, data);
             finish();
         }
 

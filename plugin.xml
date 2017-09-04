@@ -80,6 +80,8 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
             <uses-permission android:name="android.permission.RECORD_VIDEO"/>
 
 
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">             
             <activity
                 android:name="com.creative.idrecognition.MainActivity"
                 android:label="@string/title_activity_main" >
@@ -88,7 +90,6 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
             <activity android:name="com.creative.idrecognition.OcrCaptureActivity"
                 android:label="Read Text" />
         </config-file>
-
         
 
         <source-file src="src/android/Capture.java" target-dir="src/org/apache/cordova/mediacapture" />
