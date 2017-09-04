@@ -92,10 +92,10 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <source-file src="src/android/com/creative/idrecognition/MainActivity.java" target-dir="src/com/creative/idrecognition/" />
         <source-file src="src/android/com/creative/idrecognition/OcrCaptureActivity.java" target-dir="src/com/creative/idrecognition/" />
         <source-file src="src/android/com/creative/idrecognition/OcrDetectorProcessor.java" target-dir="src/com/creative/idrecognition/" />
-        <source-file src="src/android/com/creative/idrecognition/OcrGraphic.java" target-dir="com/creative/idrecognition/" />
-        <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSource.java" target-dir="com/creative/idrecognition/ui/camera/" />
-        <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSourcePreview.java" target-dir="com/creative/idrecognition/ui/camera/" />
-        <source-file src="src/android/com/creative/idrecognition/ui/camera/GraphicOverlay.java" target-dir="com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/OcrGraphic.java" target-dir="src/com/creative/idrecognition/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSource.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSourcePreview.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/GraphicOverlay.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
 
 
         <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />

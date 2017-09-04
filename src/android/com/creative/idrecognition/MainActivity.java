@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     statusMessage.setText(getResources().getIdentifier("ocr_failure", "string", getPackageName()));
                     Log.d(TAG, "No Text captured, intent data is null");
                 }
-            } else {s
+            } else {
                 statusMessage.setText(String.format(getString(getResources().getIdentifier("ocr_error", "string", getPackageName())),
                         CommonStatusCodes.getStatusCodeString(resultCode)));
             }
