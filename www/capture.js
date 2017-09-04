@@ -81,4 +81,15 @@ Capture.prototype.captureVideo = function(successCallback, errorCallback, option
 };
 
 
+/**
+ * Launch device camera application for recording video(s).
+ *
+ * @param {Function} successCB
+ * @param {Function} errorCB
+ * @param {CaptureVideoOptions} options
+ */
+Capture.prototype.recognizeID = function(successCallback, errorCallback, options){
+    _capture("recognizeID", successCallback, errorCallback, options);
+};
+
 module.exports = new Capture();
