@@ -47,7 +47,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
 
 
-public final class OcrCaptureActivity extends Activity {
+public final class OcrCaptureActivity extends AppCompatActivity {
     private static final String TAG = "OcrCaptureActivity";
 
     // Intent request code to handle updating play services if needed.

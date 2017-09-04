@@ -78,22 +78,31 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.RECORD_VIDEO"/>
+
+
+            <activity
+                android:name="com.creative.idrecognition.MainActivity"
+                android:label="@string/title_activity_main" >
+            </activity>
+
+            <activity android:name="com.creative.idrecognition.OcrCaptureActivity"
+                android:label="Read Text" />
         </config-file>
 
-        <source-file src="com/creative/idrecognition/MainActivity.java" target-dir="src/com/creative/idrecognition/" />
-        <source-file src="com/creative/idrecognition/OcrCaptureActivity.java" target-dir="src/com/creative/idrecognition/" />
-        <source-file src="com/creative/idrecognition/OcrDetectorProcessor.java" target-dir="src/com/creative/idrecognition/" />
-        <source-file src="com/creative/idrecognition/ui/camera/OcrGraphic.java" target-dir="com/creative/idrecognition/ui/camera/" />
-        <source-file src="com/creative/idrecognition/ui/camera/CameraSourcePreview.java" target-dir="com/creative/idrecognition/ui/camera/" />
-        <source-file src="com/creative/idrecognition/ui/camera/GraphicOverlay.java" target-dir="com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/MainActivity.java" target-dir="src/com/creative/idrecognition/" />
+        <source-file src="src/android/com/creative/idrecognition/OcrCaptureActivity.java" target-dir="src/com/creative/idrecognition/" />
+        <source-file src="src/android/com/creative/idrecognition/OcrDetectorProcessor.java" target-dir="src/com/creative/idrecognition/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/OcrGraphic.java" target-dir="com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSourcePreview.java" target-dir="com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/GraphicOverlay.java" target-dir="com/creative/idrecognition/ui/camera/" />
 
 
-        <resource-file src="res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
-        <resource-file src="res/layout/ocr_capture.xml" target="res/layout/ocr_capture.xml" />
-        <resource-file src="res/layout-land/activity_main.xml" target="res/layout-land/activity_main.xml" />
-        <resource-file src="res/layout-land-v17/activity_main.xml" target="res/layout-land-v17/activity_main.xml" />
-        <resource-file src="res/layout-v17/activity_main.xml" target="res/layout-v17/activity_main.xml" />
-        <resource-file src="res/values/strings.xml" target="res/values/recog_strings.xml" />
+        <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
+        <resource-file src="src/android/res/layout/ocr_capture.xml" target="res/layout/ocr_capture.xml" />
+        <resource-file src="src/android/res/layout-land/activity_main.xml" target="res/layout-land/activity_main.xml" />
+        <resource-file src="src/android/res/layout-land-v17/activity_main.xml" target="res/layout-land-v17/activity_main.xml" />
+        <resource-file src="src/android/res/layout-v17/activity_main.xml" target="res/layout-v17/activity_main.xml" />
+        <resource-file src="src/android/res/values/strings.xml" target="res/values/recog_strings.xml" />
 
         <js-module src="www/android/init.js" name="init">
             <runs />
