@@ -39,6 +39,10 @@ function wrapMediaFiles(pluginResult) {
     return mediaFiles;
 }
 
+// function wrapJsonObject(pluginResult) {
+//     return pluginResult;
+// }
+
 module.exports = {
     wrapMediaFiles: wrapMediaFiles
 };

@@ -81,6 +81,12 @@ Capture.prototype.captureVideo = function(successCallback, errorCallback, option
 };
 
 
+function _recognize(type, successCallback, errorCallback, options) {
+    var win = function(pluginResult) {
+        successCallback(pluginResult);
+    };
+    exec(win, errorCallback, "Capture", type, [options]);
+}
 /**
  * Launch device camera application for recording video(s).
  *
@@ -89,7 +95,7 @@ Capture.prototype.captureVideo = function(successCallback, errorCallback, option
  * @param {CaptureVideoOptions} options
  */
 Capture.prototype.recognizeID = function(successCallback, errorCallback, options){
-    _capture("recognizeID", successCallback, errorCallback, options);
+    _recognize("recognizeID", successCallback, errorCallback, options);
 };
 
 module.exports = new Capture();
