@@ -89,6 +89,11 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
                 android:label="Read Text" />
         </config-file>
 
+        
+
+        <source-file src="src/android/Capture.java" target-dir="src/org/apache/cordova/mediacapture" />
+        <source-file src="src/android/FileHelper.java" target-dir="src/org/apache/cordova/mediacapture" />
+        <source-file src="src/android/PendingRequests.java" target-dir="src/org/apache/cordova/mediacapture" />
         <source-file src="src/android/com/creative/idrecognition/MainActivity.java" target-dir="src/com/creative/idrecognition/" />
         <source-file src="src/android/com/creative/idrecognition/OcrCaptureActivity.java" target-dir="src/com/creative/idrecognition/" />
         <source-file src="src/android/com/creative/idrecognition/OcrDetectorProcessor.java" target-dir="src/com/creative/idrecognition/" />

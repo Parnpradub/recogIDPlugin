@@ -97,7 +97,7 @@ public class CameraSource {
     private Thread mProcessingThread;
     private FrameProcessingRunnable mFrameProcessor;
 
-    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<>();
+    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<byte[], ByteBuffer>();
 
     public static class Builder {
         private final Detector<?> mDetector;
@@ -611,7 +611,7 @@ public class CameraSource {
                 parameters.getSupportedPreviewSizes();
         List<Camera.Size> supportedPictureSizes =
                 parameters.getSupportedPictureSizes();
-        List<SizePair> validPreviewSizes = new ArrayList<>();
+        List<SizePair> validPreviewSizes = new ArrayList<SizePair>();
         for (Camera.Size previewSize : supportedPreviewSizes) {
             float previewAspectRatio = (float) previewSize.width / (float) previewSize.height;
 
