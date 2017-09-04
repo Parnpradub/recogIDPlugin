@@ -58,7 +58,7 @@ public final class OcrCaptureActivity extends Activity {
     // Constants used to pass extra data in the intent
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
-    public static final String TextBlockObject = "String";
+    public static final String TextBlockObject = "recognized_id_string";
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
