@@ -14,8 +14,6 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     // Use a compound button so either checkbox or switch widgets work.
-    private CompoundButton autoFocus;
-    private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView textValue;
 
@@ -30,8 +28,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         statusMessage = (TextView)findViewById(getResources().getIdentifier("status_message", "id", getPackageName()));
         textValue = (TextView)findViewById(getResources().getIdentifier("text_value", "id", getPackageName()));
 
-        autoFocus = (CompoundButton) findViewById(getResources().getIdentifier("auto_focus", "id", getPackageName()));
-        useFlash = (CompoundButton) findViewById(getResources().getIdentifier("use_flash", "id", getPackageName()));
 
         findViewById(getResources().getIdentifier("read_text", "id", getPackageName())).setOnClickListener(this);
     }
@@ -42,8 +38,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v.getId() == getResources().getIdentifier("read_text", "id", getPackageName())) {
             // launch Ocr capture activity.
             Intent intent = new Intent(this, OcrCaptureActivity.class);
-            intent.putExtra(OcrCaptureActivity.AutoFocus, autoFocus.isChecked());
-            intent.putExtra(OcrCaptureActivity.UseFlash, useFlash.isChecked());
 
             startActivityForResult(intent, RC_OCR_CAPTURE);
         }

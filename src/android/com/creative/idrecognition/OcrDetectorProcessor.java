@@ -1,7 +1,6 @@
 
 package com.creative.idrecognition;
 
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
 import android.view.View;
@@ -17,7 +16,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
 
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
-    OcrDetectorProcessor(Activity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
+    OcrDetectorProcessor(AppCompatActivity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
         mGraphicOverlay = ocrGraphicOverlay;
         mainActivity = (OcrCaptureActivity)activity;
     }
@@ -30,11 +29,10 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         for (int i = 0; i < items.size(); ++i) {
             TextBlock item = items.valueAt(i);
 
-            if(detectId(item.getValue().toString())){
-                OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
-                mGraphicOverlay.add(graphic);
-                mainActivity.detectionSuccess(true,item);
-            }
+            OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
+            mGraphicOverlay.add(graphic);
+            mainActivity.detectionSuccess(graphic.recogFlag,item);
+
 
         }
     }
@@ -44,14 +42,5 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
         mGraphicOverlay.clear();
     }
 
-    public Boolean detectId(String str) {
-        String pre = str.replaceAll("[^-]","");
-        String numOnly = str.replaceAll("[^0-9]", "");
-        if (numOnly.length() == 11 && pre.length() == 2) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }

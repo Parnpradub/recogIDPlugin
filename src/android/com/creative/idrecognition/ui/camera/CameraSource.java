@@ -5,8 +5,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
@@ -19,11 +25,17 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.creative.idrecognition.ExtraViews.FocusBoxUtils;
+import com.creative.idrecognition.ExtraViews.FocusBoxView;
+
+import com.creative.idrecognition.OcrCaptureActivity;
 import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.lang.annotation.Retention;
@@ -47,6 +59,9 @@ public class CameraSource {
 
     private static final float ASPECT_RATIO_TOLERANCE = 0.01f;
 
+    public FocusBoxView focusbox;
+
+    public OcrCaptureActivity myActivity;
     @StringDef({
         Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE,
         Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
@@ -97,7 +112,7 @@ public class CameraSource {
     private Thread mProcessingThread;
     private FrameProcessingRunnable mFrameProcessor;
 
-    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<byte[], ByteBuffer>();
+    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<>();
 
     public static class Builder {
         private final Detector<?> mDetector;
@@ -192,33 +207,6 @@ public class CameraSource {
         }
     }
 
-
-    @RequiresPermission(Manifest.permission.CAMERA)
-    public CameraSource start() throws IOException {
-        synchronized (mCameraLock) {
-            if (mCamera != null) {
-                return this;
-            }
-
-            mCamera = createCamera();
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                mDummySurfaceTexture = new SurfaceTexture(DUMMY_TEXTURE_NAME);
-                mCamera.setPreviewTexture(mDummySurfaceTexture);
-            } else {
-                mDummySurfaceView = new SurfaceView(mContext);
-                mCamera.setPreviewDisplay(mDummySurfaceView.getHolder());
-            }
-            mCamera.startPreview();
-
-            mProcessingThread = new Thread(mFrameProcessor);
-            mFrameProcessor.setActive(true);
-            mProcessingThread.start();
-        }
-        return this;
-    }
-
-
     @RequiresPermission(Manifest.permission.CAMERA)
     public CameraSource start(SurfaceHolder surfaceHolder) throws IOException {
         synchronized (mCameraLock) {
@@ -282,50 +270,6 @@ public class CameraSource {
         return mFacing;
     }
 
-    public int doZoom(float scale) {
-        synchronized (mCameraLock) {
-            if (mCamera == null) {
-                return 0;
-            }
-            int currentZoom = 0;
-            int maxZoom;
-            Camera.Parameters parameters = mCamera.getParameters();
-            if (!parameters.isZoomSupported()) {
-                Log.w(TAG, "Zoom is not supported on this device");
-                return currentZoom;
-            }
-            maxZoom = parameters.getMaxZoom();
-
-            currentZoom = parameters.getZoom() + 1;
-            float newZoom;
-            if (scale > 1) {
-                newZoom = currentZoom + scale * (maxZoom / 10);
-            } else {
-                newZoom = currentZoom * scale;
-            }
-            currentZoom = Math.round(newZoom) - 1;
-            if (currentZoom < 0) {
-                currentZoom = 0;
-            } else if (currentZoom > maxZoom) {
-                currentZoom = maxZoom;
-            }
-            parameters.setZoom(currentZoom);
-            mCamera.setParameters(parameters);
-            return currentZoom;
-        }
-    }
-
-    public void takePicture(ShutterCallback shutter, PictureCallback jpeg) {
-        synchronized (mCameraLock) {
-            if (mCamera != null) {
-                PictureStartCallback startCallback = new PictureStartCallback();
-                startCallback.mDelegate = shutter;
-                PictureDoneCallback doneCallback = new PictureDoneCallback();
-                doneCallback.mDelegate = jpeg;
-                mCamera.takePicture(startCallback, null, null, doneCallback);
-            }
-        }
-    }
 
     @Nullable
     @FocusMode
@@ -419,39 +363,6 @@ public class CameraSource {
         return true;
     }
 
-    private CameraSource() {
-    }
-
-    private class PictureStartCallback implements Camera.ShutterCallback {
-        private ShutterCallback mDelegate;
-
-        @Override
-        public void onShutter() {
-            if (mDelegate != null) {
-                mDelegate.onShutter();
-            }
-        }
-    }
-
-    private class PictureDoneCallback implements Camera.PictureCallback {
-        private PictureCallback mDelegate;
-
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            if (mDelegate != null) {
-                mDelegate.onPictureTaken(data);
-            }
-            synchronized (mCameraLock) {
-                if (mCamera != null) {
-                    mCamera.startPreview();
-                }
-            }
-        }
-    }
-
-    /**
-     * Wraps the camera1 auto focus callback so that the deprecated API isn't exposed.
-     */
     private class CameraAutoFocusCallback implements Camera.AutoFocusCallback {
         private AutoFocusCallback mDelegate;
 
@@ -478,11 +389,6 @@ public class CameraSource {
         }
     }
 
-    /**
-     * Opens the camera and applies the user settings.
-     *
-     * @throws RuntimeException if the method fails
-     */
     @SuppressLint("InlinedApi")
     private Camera createCamera() {
         int requestedCameraId = getIdForRequestedCamera(mFacing);
@@ -497,6 +403,7 @@ public class CameraSource {
         }
         Size pictureSize = sizePair.pictureSize();
         mPreviewSize = sizePair.previewSize();
+
 
         int[] previewFpsRange = selectPreviewFpsRange(camera, mRequestedFps);
         if (previewFpsRange == null) {
@@ -698,9 +605,10 @@ public class CameraSource {
     private byte[] createPreviewBuffer(Size previewSize) {
         int bitsPerPixel = ImageFormat.getBitsPerPixel(ImageFormat.NV21);
         long sizeInBits = previewSize.getHeight() * previewSize.getWidth() * bitsPerPixel;
-        int bufferSize = (int) Math.ceil(sizeInBits / 8.0d) + 1;
+        int bufferSize = (int) Math.ceil(sizeInBits /3.0d) + 1;
 
         byte[] byteArray = new byte[bufferSize];
+
         ByteBuffer buffer = ByteBuffer.wrap(byteArray);
         if (!buffer.hasArray() || (buffer.array() != byteArray)) {
 
@@ -714,19 +622,17 @@ public class CameraSource {
     private class CameraPreviewCallback implements Camera.PreviewCallback {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
+
             mFrameProcessor.setNextFrame(data, camera);
         }
     }
 
     private class FrameProcessingRunnable implements Runnable {
         private Detector<?> mDetector;
-        private long mStartTimeMillis = SystemClock.elapsedRealtime();
 
         private final Object mLock = new Object();
         private boolean mActive = true;
 
-        private long mPendingTimeMillis;
-        private int mPendingFrameId = 0;
         private ByteBuffer mPendingFrameData;
 
         FrameProcessingRunnable(Detector<?> detector) {
@@ -761,9 +667,39 @@ public class CameraSource {
                     return;
                 }
 
-                mPendingTimeMillis = SystemClock.elapsedRealtime() - mStartTimeMillis;
-                mPendingFrameId++;
                 mPendingFrameData = mBytesToByteBuffer.get(data);
+                Rect rc = focusbox.getBox();
+
+                Camera.Parameters parameters = camera.getParameters();
+                int width = parameters.getPreviewSize().width;
+                int height = parameters.getPreviewSize().height;
+
+                int scx = FocusBoxUtils.getScreenResolution(mContext).x;
+                int scy = FocusBoxUtils.getScreenResolution(mContext).y;
+
+                double ratiox = scx/(double)(height);
+                double ratioy = scy/(double)(width);
+
+                YuvImage yuv = new YuvImage(mPendingFrameData.array(), parameters.getPreviewFormat(), width, height, null);
+
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                yuv.compressToJpeg(new Rect(0, 0, width, height), 80, out);
+
+                byte[] bytes1 = out.toByteArray();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes1, 0, bytes1.length);
+
+                Bitmap bitmap1 = RotateBitmap(bitmap, mRotation*90);
+
+                final Bitmap bmp = Bitmap.createBitmap(bitmap1, (int)(rc.left/ratiox),(int)(rc.top/ratioy),(int)((rc.right-rc.left)/ratiox), (int)((rc.bottom-rc.top)/ratioy));
+
+                Frame frame = new Frame.Builder().setBitmap(bmp).build();
+
+                try {
+                    mDetector.receiveFrame(frame);
+                } catch (Throwable t) {
+                    Log.e(TAG, "Exception thrown from receiver.", t);
+                }
+
 
                 mLock.notifyAll();
             }
@@ -771,48 +707,17 @@ public class CameraSource {
 
         @Override
         public void run() {
-            Frame outputFrame;
-            ByteBuffer data;
 
-            while (true) {
-                synchronized (mLock) {
-                    while (mActive && (mPendingFrameData == null)) {
-                        try {
-                            // Wait for the next frame to be received from the camera, since we
-                            // don't have it yet.
-                            mLock.wait();
-                        } catch (InterruptedException e) {
-                            Log.d(TAG, "Frame processing loop terminated.", e);
-                            return;
-                        }
-                    }
-
-                    if (!mActive) {
-
-                        return;
-                    }
-
-                    outputFrame = new Frame.Builder()
-                            .setImageData(mPendingFrameData, mPreviewSize.getWidth(),
-                                    mPreviewSize.getHeight(), ImageFormat.NV21)
-                            .setId(mPendingFrameId)
-                            .setTimestampMillis(mPendingTimeMillis)
-                            .setRotation(mRotation)
-                            .build();
-
-                    data = mPendingFrameData;
-                    mPendingFrameData = null;
-                }
-
-
-                try {
-                    mDetector.receiveFrame(outputFrame);
-                } catch (Throwable t) {
-                    Log.e(TAG, "Exception thrown from receiver.", t);
-                } finally {
-                    mCamera.addCallbackBuffer(data.array());
-                }
-            }
+            try {
+                mCamera.addCallbackBuffer(mPendingFrameData.array());
+            }catch (Exception e){}
         }
+    }
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle)
+    {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }

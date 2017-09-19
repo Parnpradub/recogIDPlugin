@@ -25,28 +25,49 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.hardware.Camera;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.creative.idrecognition.ExtraViews.FocusBoxView;
+import com.creative.idrecognition.ui.camera.FocusBox;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.creative.idrecognition.ui.camera.CameraSource;
 import com.creative.idrecognition.ui.camera.CameraSourcePreview;
 import com.creative.idrecognition.ui.camera.GraphicOverlay;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.Line;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.List;
+
+import static android.hardware.Camera.Parameters.FLASH_MODE_TORCH;
+import static android.hardware.Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
 
 
-public final class OcrCaptureActivity extends Activity {
+import static java.security.AccessController.getContext;
+
+
+public final class OcrCaptureActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "OcrCaptureActivity";
 
     // Intent request code to handle updating play services if needed.
@@ -55,15 +76,18 @@ public final class OcrCaptureActivity extends Activity {
     // Permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
-    // Constants used to pass extra data in the intent
-    public static final String AutoFocus = "AutoFocus";
-    public static final String UseFlash = "UseFlash";
     public static final String TextBlockObject = "recognized_id_string";
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
+   // private FocusBox mFocusBox;
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
+    private Button flashbutton;
 
+    private boolean useFlash = false;
+
+    private static final long VIBRATE_DURATION = 200L;
+    private boolean mVibrate;
 
 
     @Override
@@ -74,19 +98,37 @@ public final class OcrCaptureActivity extends Activity {
         mPreview = (CameraSourcePreview) findViewById(getResources().getIdentifier("preview", "id", getPackageName()));
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(getResources().getIdentifier("graphicOverlay", "id", getPackageName()));
 
-        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
-        boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
 
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(autoFocus, useFlash);
+            createCameraSource();
         } else {
             requestCameraPermission();
         }
 
+        flashbutton = (Button)findViewById(R.id.flash_button);
+        findViewById(R.id.flash_button).setOnClickListener(this);
+
 
     }
 
+    @Override
+    public void onClick(View view) {
+
+        if(view.getId() == R.id.flash_button){
+            if(!useFlash){
+                mCameraSource.setFlashMode(FLASH_MODE_TORCH);
+                useFlash = true;
+                flashbutton.setBackgroundResource(R.drawable.flash_off);
+            }
+            else {
+                mCameraSource.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                useFlash = false;
+                flashbutton.setBackgroundResource(R.drawable.flash_on);
+            }
+
+        }
+    }
 
     private void requestCameraPermission() {
         Log.w(TAG, "Camera permission is not granted. Requesting permission");
@@ -117,7 +159,7 @@ public final class OcrCaptureActivity extends Activity {
 
 
     @SuppressLint("InlinedApi")
-    private void createCameraSource(boolean autoFocus, boolean useFlash) {
+    private void createCameraSource() {
         Context context = getApplicationContext();
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
@@ -141,9 +183,11 @@ public final class OcrCaptureActivity extends Activity {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1280, 1024)
                 .setRequestedFps(2.0f)
-                .setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
-                .setFocusMode(autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null)
+                .setFocusMode(FOCUS_MODE_CONTINUOUS_PICTURE)
                 .build();
+        mCameraSource.myActivity = this;
+
+        mCameraSource.focusbox = (FocusBoxView)findViewById(R.id.focus_box);
     }
 
 
@@ -184,9 +228,7 @@ public final class OcrCaptureActivity extends Activity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // We have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,false);
-            boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
-            createCameraSource(autoFocus, useFlash);
+            createCameraSource();
             return;
         }
 
@@ -231,12 +273,22 @@ public final class OcrCaptureActivity extends Activity {
     public void detectionSuccess(boolean flag,TextBlock item) {
 
         if(flag){
+
             Intent data = new Intent();
-            String result = item.getValue().toString().replaceAll("[^\\d-]", "");
+            String result = getL(item).replaceAll("[^\\d-]", "");
             data.putExtra(TextBlockObject, "data: "+result);
-            setResult(Activity.RESULT_OK, data);
+            setResult(CommonStatusCodes.SUCCESS, data);
             finish();
         }
-
     }
+
+    private String getL(TextBlock block){
+        List<Line> lines = (List<Line>) block.getComponents();
+        String str = "";
+        for(Line elements : lines){
+            str = elements.getValue().toString();
+        }
+        return str;
+    }
+
 }

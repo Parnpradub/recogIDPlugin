@@ -102,6 +102,9 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSource.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
         <source-file src="src/android/com/creative/idrecognition/ui/camera/CameraSourcePreview.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
         <source-file src="src/android/com/creative/idrecognition/ui/camera/GraphicOverlay.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ui/camera/FocusBox.java" target-dir="src/com/creative/idrecognition/ui/camera/" />
+        <source-file src="src/android/com/creative/idrecognition/ExtraViews/FocusBoxUtils.java" target-dir="src/com/creative/idrecognition/ExtraViews/" />
+        <source-file src="src/android/com/creative/idrecognition/ExtraViews/FocusBoxView.java" target-dir="src/com/creative/idrecognition/ExtraViews/" />
 
 
         <resource-file src="src/android/res/layout/activity_main.xml" target="res/layout/activity_main.xml" />
@@ -110,6 +113,7 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <resource-file src="src/android/res/layout-land-v17/activity_main.xml" target="res/layout-land-v17/activity_main.xml" />
         <resource-file src="src/android/res/layout-v17/activity_main.xml" target="res/layout-v17/activity_main.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/recog_strings.xml" />
+        <resource-file src="src/android/res/values/colors.xml" target="res/values/recog_colors.xml" />
 
         <js-module src="www/android/init.js" name="init">
             <runs />
