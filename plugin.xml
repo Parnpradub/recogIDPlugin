@@ -114,6 +114,8 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <resource-file src="src/android/res/layout-v17/activity_main.xml" target="res/layout-v17/activity_main.xml" />
         <resource-file src="src/android/res/values/strings.xml" target="res/values/recog_strings.xml" />
         <resource-file src="src/android/res/values/colors.xml" target="res/values/recog_colors.xml" />
+        <resource-file src="src/android/res/drawable/flash_on.png" target="res/drawable/flash_on.png" />
+        <resource-file src="src/android/res/drawable/flash_off.png" target="res/drawable/flash_off.png" />
 
         <js-module src="www/android/init.js" name="init">
             <runs />
