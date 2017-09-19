@@ -112,7 +112,7 @@ public class CameraSource {
     private Thread mProcessingThread;
     private FrameProcessingRunnable mFrameProcessor;
 
-    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<>();
+    private Map<byte[], ByteBuffer> mBytesToByteBuffer = new HashMap<byte[], ByteBuffer>();
 
     public static class Builder {
         private final Detector<?> mDetector;

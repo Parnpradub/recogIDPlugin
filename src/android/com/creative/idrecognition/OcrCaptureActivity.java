@@ -106,8 +106,8 @@ public final class OcrCaptureActivity extends AppCompatActivity implements View.
             requestCameraPermission();
         }
 
-        flashbutton = (Button)findViewById(R.id.flash_button);
-        findViewById(R.id.flash_button).setOnClickListener(this);
+        flashbutton = (Button)findViewById(getResources().getIdentifier("flash_button", "id", getPackageName()));
+        flashbutton.setOnClickListener(this);
 
 
     }
@@ -115,16 +115,16 @@ public final class OcrCaptureActivity extends AppCompatActivity implements View.
     @Override
     public void onClick(View view) {
 
-        if(view.getId() == R.id.flash_button){
+        if(view.getId() == getResources().getIdentifier("flash_button", "id", getPackageName())){
             if(!useFlash){
                 mCameraSource.setFlashMode(FLASH_MODE_TORCH);
                 useFlash = true;
-                flashbutton.setBackgroundResource(R.drawable.flash_off);
+                flashbutton.setBackgroundResource(getResources().getIdentifier("flash_off", "drawable", getPackageName()));
             }
             else {
                 mCameraSource.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
                 useFlash = false;
-                flashbutton.setBackgroundResource(R.drawable.flash_on);
+                flashbutton.setBackgroundResource(getResources().getIdentifier("flash_on", "drawable", getPackageName()));
             }
 
         }
@@ -187,7 +187,7 @@ public final class OcrCaptureActivity extends AppCompatActivity implements View.
                 .build();
         mCameraSource.myActivity = this;
 
-        mCameraSource.focusbox = (FocusBoxView)findViewById(R.id.focus_box);
+        mCameraSource.focusbox = (FocusBoxView)findViewById(getResources().getIdentifier("focus_box", "id", getPackageName()));
     }
 
 
