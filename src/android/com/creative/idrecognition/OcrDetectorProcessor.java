@@ -1,10 +1,8 @@
 
 package com.creative.idrecognition;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.util.SparseArray;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.creative.idrecognition.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
@@ -16,7 +14,7 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
 
 
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
-    OcrDetectorProcessor(AppCompatActivity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
+    OcrDetectorProcessor(Activity activity, GraphicOverlay<OcrGraphic> ocrGraphicOverlay) {
         mGraphicOverlay = ocrGraphicOverlay;
         mainActivity = (OcrCaptureActivity)activity;
     }
@@ -32,8 +30,6 @@ public class OcrDetectorProcessor implements Detector.Processor<TextBlock> {
             OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
             mGraphicOverlay.add(graphic);
             mainActivity.detectionSuccess(graphic.recogFlag,item);
-
-
         }
     }
 

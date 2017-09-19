@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.creative.idrecognition.R;
+
 
 /**
  * Created by Fadi on 5/11/2014.
@@ -32,8 +32,8 @@ public class FocusBoxView extends View {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Resources resources = getResources();
 
-        maskColor = resources.getColor(getResources().getIdentifier("focus_box_mask", "color", getPackageName()));
-        frameColor = resources.getColor(getResources().getIdentifier("focus_box_frame", "color", getPackageName()));
+        maskColor = resources.getColor(getResources().getIdentifier("focus_box_mask", "color", context.getPackageName()));
+        frameColor = resources.getColor(getResources().getIdentifier("focus_box_frame", "color", context.getPackageName()));
 
         nPaint = new Paint();
         nPaint.setColor(Color.YELLOW);

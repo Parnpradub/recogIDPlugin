@@ -36,12 +36,9 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.creative.idrecognition.ExtraViews.FocusBoxView;
@@ -67,7 +64,7 @@ import static android.hardware.Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE;
 import static java.security.AccessController.getContext;
 
 
-public final class OcrCaptureActivity extends AppCompatActivity implements View.OnClickListener{
+public final class OcrCaptureActivity extends Activity implements View.OnClickListener{
     private static final String TAG = "OcrCaptureActivity";
 
     // Intent request code to handle updating play services if needed.
@@ -277,7 +274,7 @@ public final class OcrCaptureActivity extends AppCompatActivity implements View.
             Intent data = new Intent();
             String result = getL(item).replaceAll("[^\\d-]", "");
             data.putExtra(TextBlockObject, "data: "+result);
-            setResult(CommonStatusCodes.SUCCESS, data);
+            setResult(Activity.RESULT_OK, data);
             finish();
         }
     }

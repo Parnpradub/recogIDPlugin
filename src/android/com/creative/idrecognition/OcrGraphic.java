@@ -54,6 +54,7 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
         String str = getLines(txt);
         String pre = str.replaceAll("[^-]","");
         String numOnly = str.replaceAll("[^0-9]", "");
+
         if (numOnly.length() == 11 && pre.length() == 2) {
             return true;
         } else {
