@@ -273,7 +273,7 @@ public final class OcrCaptureActivity extends Activity implements View.OnClickLi
 
             Intent data = new Intent();
             String result = getL(item).replaceAll("[^\\d-]", "");
-            data.putExtra(TextBlockObject, "data: "+result);
+            data.putExtra(TextBlockObject, result);
             setResult(Activity.RESULT_OK, data);
             finish();
         }

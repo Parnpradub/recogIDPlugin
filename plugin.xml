@@ -77,9 +77,10 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.RECORD_VIDEO"/>
-
-
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-feature android:name="android.hardware.camera" />
+            <uses-feature android:name="android.hardware.camera.autofocus" />
+            
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">             
             <activity
