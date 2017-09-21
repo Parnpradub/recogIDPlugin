@@ -690,7 +690,14 @@ public class CameraSource {
 
                 Bitmap bitmap1 = RotateBitmap(bitmap, mRotation*90);
 
-                final Bitmap bmp = Bitmap.createBitmap(bitmap1, (int)(rc.left/ratiox),(int)(rc.top/ratioy),(int)((rc.right-rc.left)/ratiox), (int)((rc.bottom-rc.top)/ratioy));
+                final Bitmap bmp = Bitmap.createBitmap(bitmap1, (int)(rc.left/ratiox),(int)((rc.top)/ratioy),(int)((rc.right-rc.left)/ratiox), (int)((rc.bottom-rc.top)/ratioy));
+
+//                myActivity.runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        myActivity.testview.setImageBitmap(bmp);
+//                    }
+//                });
+
 
                 Frame frame = new Frame.Builder().setBitmap(bmp).build();
 

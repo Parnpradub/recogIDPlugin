@@ -39,6 +39,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.creative.idrecognition.ExtraViews.FocusBoxView;
@@ -81,6 +82,8 @@ public final class OcrCaptureActivity extends Activity implements View.OnClickLi
     private GraphicOverlay<OcrGraphic> mGraphicOverlay;
     private Button flashbutton;
 
+//    public ImageView testview;
+
     private boolean useFlash = false;
 
     private static final long VIBRATE_DURATION = 200L;
@@ -105,7 +108,7 @@ public final class OcrCaptureActivity extends Activity implements View.OnClickLi
 
         flashbutton = (Button)findViewById(getResources().getIdentifier("flash_button", "id", getPackageName()));
         flashbutton.setOnClickListener(this);
-
+//        testview = (ImageView) findViewById(getResources().getIdentifier("imageview", "id", getPackageName()));
 
     }
 

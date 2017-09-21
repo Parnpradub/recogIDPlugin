@@ -55,7 +55,7 @@ public class FocusBoxView extends View {
             ScrRes = FocusBoxUtils.getScreenResolution(getContext());
 
             int width = ScrRes.x * 7/ 9;
-            int height = ScrRes.y / 8;
+            int height = ScrRes.y / 11;
 
             width = width == 0
                     ? MIN_FOCUS_BOX_WIDTH
@@ -101,10 +101,10 @@ public class FocusBoxView extends View {
         paint.setAlpha(0);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(frameColor);
-        canvas.drawRect(frame.left, frame.top+40, frame.right + 1, frame.top+40 + 2, paint);
-        canvas.drawRect(frame.left, frame.top+40 + 2, frame.left + 2, frame.bottom-40 - 1, paint);
-        canvas.drawRect(frame.right - 1, frame.top+40, frame.right + 1, frame.bottom-40 - 1, paint);
-        canvas.drawRect(frame.left, frame.bottom-40 - 1, frame.right + 1, frame.bottom-40 + 1, paint);
+        canvas.drawRect(frame.left, frame.top, frame.right + 1, frame.top + 2, paint);
+        canvas.drawRect(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1, paint);
+        canvas.drawRect(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1, paint);
+        canvas.drawRect(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1, paint);
 
 
         float inoffXout = 50;

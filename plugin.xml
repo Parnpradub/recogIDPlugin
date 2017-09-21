@@ -89,7 +89,7 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
             </activity>
 
             <activity android:name="com.creative.idrecognition.OcrCaptureActivity"
-                android:label="Read Text" />
+                android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
         </config-file>
         
 
