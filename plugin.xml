@@ -123,4 +123,16 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         </js-module>
     </platform>
 
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+        <feature name="CameraPreview">
+            <param name="ios-package" value="CameraPreview" onload="true" />
+        </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVCapture.h" />
+        <source-file src="src/ios/CDVCapture.m" />
+
+        <framework src="QuartzCore.framework"/>
+    </platform>
 </plugin>
