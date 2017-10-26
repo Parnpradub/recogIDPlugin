@@ -66,6 +66,10 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <clobbers target="navigator.device.capture" />
     </js-module>
 
+    <js-module src="www/DocRecognize.js" name="DocRecognize">
+        <clobbers target="DocRecognize"/>
+    </js-module>
+
     <!-- android -->
     <platform name="android">
         <framework src="com.google.android.gms:play-services-vision:11.0.4" />
@@ -125,14 +129,20 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
 
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-        <feature name="CameraPreview">
-            <param name="ios-package" value="CameraPreview" onload="true" />
+        <feature name="DocRecognize">
+            <param name="ios-package" value="DocRecognize"/>
         </feature>
         </config-file>
+        <source-file src="src/ios/DocRecognize.m"/>
+        <header-file src="src/ios/DocRecognize.h"/>
+        <source-file src="src/ios/RecognizeViewController.m"/>
+        <header-file src="src/ios/RecognizeViewController.h"/>
 
-        <header-file src="src/ios/CDVCapture.h" />
-        <source-file src="src/ios/CDVCapture.m" />
+        <framework src="TesseractOCRiOS" type="podspec" spec="~> 4.0.0"/>
+        <framework src="AVFoundation.framework"/>
+        <framework src="Foundation.framework"/>
+        <framework src="UIKit.framework"/>
 
-        <framework src="QuartzCore.framework"/>
+        <resource-file src="src/tessdata" />
     </platform>
 </plugin>
