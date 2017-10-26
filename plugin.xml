@@ -143,7 +143,9 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
         <source-file src="src/ios/RecognizeViewController.m"/>
         <header-file src="src/ios/RecognizeViewController.h"/>
 
-        <pod name="TesseractOCRiOS" version="4.0.0" />
+        <!-- <pod name="TesseractOCRiOS" version="4.0.0" /> -->
+        <framework src="TesseractOCRiOS" type="podspec" spec="~> 4.0.0"/>
+
         <framework src="AVFoundation.framework"/>
         <framework src="Foundation.framework"/>
         <framework src="UIKit.framework"/>
