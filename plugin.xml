@@ -33,7 +33,8 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
 
     <dependency id="cordova-plugin-file" version="^4.0.0" />
     <dependency id="cordova-plugin-compat" version="^1.0.0" />
-
+    <dependency id="cordova-plugin-cocoapod-support"/>
+    
     <js-module src="www/CaptureAudioOptions.js" name="CaptureAudioOptions">
         <clobbers target="CaptureAudioOptions" />
     </js-module>
@@ -129,14 +130,22 @@ xmlns:rim="http://www.blackberry.com/ns/widgets"
 
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-        <feature name="DocRecognize">
-            <param name="ios-package" value="DocRecognize"/>
-        </feature>
+            <feature name="DocRecognize">
+                <param name="ios-package" value="DocRecognize"/>
+            </feature>
         </config-file>
+
+        <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+            <string>This app needs camera access.</string>
+        </config-file>
+
         <source-file src="src/ios/DocRecognize.m"/>
         <header-file src="src/ios/DocRecognize.h"/>
         <source-file src="src/ios/RecognizeViewController.m"/>
         <header-file src="src/ios/RecognizeViewController.h"/>
+
+        <pods-config ios-min-version="9.0" use-frameworks="true">
+        </pods-config>
 
         <framework src="TesseractOCRiOS" type="podspec" spec="~> 4.0.0"/>
         <framework src="AVFoundation.framework"/>
